@@ -2,7 +2,7 @@ from distutils.core import setup
 import setuptools
 
 setup(name='ivy-demo-utils',
-      version='0.0.0',
+      version='1.1.1',
       description='Ivy Demo Utils provides a set of utilities for creating visual demos for Ivy libraries',
       author='Ivy Team',
       author_email='ivydl.team@gmail.com',
