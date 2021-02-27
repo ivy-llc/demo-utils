@@ -10,6 +10,7 @@ from ivy_vision.containers import PrimitiveScene
 # pyrep
 try:
     from pyrep import PyRep
+    from pyrep.backend import utils
     from pyrep.objects.dummy import Dummy
     from pyrep.objects.shape import Shape
     from pyrep.robots.arms.arm import Arm
@@ -278,7 +279,7 @@ class BaseSimulator:
             plt.pause(0.1)
             plt.ioff()
             return
-        with self._pyrep._step_lock:
+        with utils.step_lock:
             self._update_path_visualization_pyrep(multi_spline_points, multi_spline_sdf_vals)
 
     def close(self):
