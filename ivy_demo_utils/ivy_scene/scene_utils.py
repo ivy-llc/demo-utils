@@ -50,8 +50,8 @@ class SimObj:
 
 class SimCam(SimObj):
 
-    def __init__(self, pr_obj, f):
-        super().__init__(pr_obj, f)
+    def __init__(self, pr_obj):
+        super().__init__(pr_obj)
         self._img_dims = pr_obj.get_resolution()
         if isinstance(pr_obj, VisionSensor):
             pp_offsets = ivy.array([item/2 - 0.5 for item in self._img_dims], 'float32')
@@ -203,13 +203,15 @@ class BaseSimulator:
                 spline_path.append(spline_path_seg)
             self._spline_paths.append(spline_path)
 
-    def depth_to_xyz(self, depth, inv_ext_mat, inv_calib_mat, img_dims):
+    @staticmethod
+    def depth_to_xyz(depth, inv_ext_mat, inv_calib_mat, img_dims):
         uniform_pixel_coords = ivy_vision.create_uniform_pixel_coords_image(img_dims)
         pixel_coords = uniform_pixel_coords * depth
         cam_coords = ivy_vision.pixel_to_cam_coords(pixel_coords, inv_calib_mat, [], img_dims)
         return ivy_vision.cam_to_world_coords(cam_coords, inv_ext_mat)[..., 0:3]
 
-    def get_pix_coords(self):
+    @staticmethod
+    def get_pix_coords():
         return ivy_vision.create_uniform_pixel_coords_image([360, 720])[..., 0:2]
 
     def setup_primitive_scene_no_sim(self, box_pos=None):
