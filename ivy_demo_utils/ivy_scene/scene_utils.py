@@ -70,7 +70,7 @@ class SimCam(SimObj):
 # noinspection PyProtectedMember
 class BaseSimulator:
 
-    def __init__(self, interactive, try_use_sim, f):
+    def __init__(self, interactive, try_use_sim):
         self._interactive = interactive
         self._try_use_sim = try_use_sim
         if PyRep is not None and try_use_sim:
