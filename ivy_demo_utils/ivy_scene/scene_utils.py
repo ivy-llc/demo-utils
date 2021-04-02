@@ -207,7 +207,7 @@ class BaseSimulator:
     def depth_to_xyz(depth, inv_ext_mat, inv_calib_mat, img_dims):
         uniform_pixel_coords = ivy_vision.create_uniform_pixel_coords_image(img_dims)
         pixel_coords = uniform_pixel_coords * depth
-        cam_coords = ivy_vision.pixel_to_cam_coords(pixel_coords, inv_calib_mat, [], img_dims)
+        cam_coords = ivy_vision.ds_pixel_to_cam_coords(pixel_coords, inv_calib_mat, [], img_dims)
         return ivy_vision.cam_to_world_coords(cam_coords, inv_ext_mat)[..., 0:3]
 
     @staticmethod
