@@ -10,9 +10,6 @@
     <a href="https://pypi.org/project/ivy-demo-utils">
         <img style="float: left; padding-right: 4px; padding-bottom: 4px;" src="https://badge.fury.io/py/ivy-demo-utils.svg">
     </a>
-    <a href="https://www.apache.org/licenses/LICENSE-2.0">
-        <img style="float: left; padding-right: 4px; padding-bottom: 4px;" src="https://img.shields.io/pypi/l/ivy-demo-utils">
-    </a>
     <a href="https://discord.gg/EN9YS3QW8w">
         <img style="float: left; padding-right: 4px; padding-bottom: 4px;" src="https://img.shields.io/discord/799879767196958751?color=blue&label=%20&logo=discord&logoColor=white">
     </a>
