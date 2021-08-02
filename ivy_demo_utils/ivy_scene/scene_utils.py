@@ -31,7 +31,7 @@ class SimObj:
         self._pr_obj = pr_obj
 
     def get_pos(self):
-        return ivy.array(self._pr_obj.get_position(), 'float32')
+        return ivy.array(self._pr_obj.get_position().tolist(), 'float32')
 
     def set_pos(self, pos):
         return self._pr_obj.set_position(ivy.to_numpy(pos))
@@ -39,10 +39,11 @@ class SimObj:
     def set_rot_mat(self, rot_mat):
         inv_ext_mat = np.concatenate((ivy.to_numpy(rot_mat),
                                       np.reshape(self._pr_obj.get_position(), (3, 1))), -1)
-        self._pr_obj.set_matrix(inv_ext_mat.reshape((-1,)).tolist())
+        inv_ext_mat_homo = ivy_mech.make_transformation_homogeneous(inv_ext_mat)
+        self._pr_obj.set_matrix(inv_ext_mat_homo)
 
     def get_inv_ext_mat(self):
-        return ivy.reshape(ivy.array(self._pr_obj.get_matrix(), 'float32'), (3, 4))
+        return ivy.reshape(ivy.array(self._pr_obj.get_matrix().tolist(), 'float32'), (3, 4))
 
     def get_ext_mat(self):
         return ivy.inv(ivy_mech.make_transformation_homogeneous(self.get_inv_ext_mat()))[0:3, :]
@@ -225,9 +226,9 @@ class BaseSimulator:
             shape_mat = np.load(os.path.join(this_dir, 'no_sim/obj_inv_ext_mat_{}.npy'.format(i)))
             if i == 10 and box_pos is not None:
                 shape_mat[..., -1:] = box_pos.reshape((1, 3, 1))
-            shape_matrices_list.append(ivy.array(shape_mat, 'float32'))
+            shape_matrices_list.append(ivy.array(shape_mat.tolist(), 'float32'))
             shape_dims_list.append(
-                ivy.array(np.load(os.path.join(this_dir, 'no_sim/obj_bbx_{}.npy'.format(i))), 'float32')
+                ivy.array(np.load(os.path.join(this_dir, 'no_sim/obj_bbx_{}.npy'.format(i))).tolist(), 'float32')
             )
 
         # matices
@@ -242,8 +243,8 @@ class BaseSimulator:
     def setup_primitive_scene(self):
 
         # shape matrices
-        shape_matrices = ivy.concatenate([ivy.reshape(ivy.array(obj.get_matrix(), 'float32'), (1, 3, 4))
-                                              for obj in self._objects], 0)
+        shape_matrices = ivy.concatenate([ivy.reshape(ivy.array(obj.get_matrix().tolist(), 'float32'), (1, 4, 4))
+                                          for obj in self._objects], 0)
 
         # shape dims
         x_dims = ivy.concatenate([ivy.reshape(ivy.array(
@@ -258,13 +259,12 @@ class BaseSimulator:
         if self._with_primitive_scene_vis:
             scene_vis = [Shape.create(PrimitiveShape.CUBOID, ivy.to_numpy(shape_dim).tolist())
                          for shape_dim in shape_dims]
-            [obj.set_matrix(ivy.to_numpy(shape_mat).reshape(-1).tolist())
+            [obj.set_matrix(ivy.to_numpy(shape_mat))
              for shape_mat, obj in zip(shape_matrices, scene_vis)]
             [obj.set_transparency(0.5) for obj in scene_vis]
 
         # sdf
-        primitive_scene = PrimitiveScene(cuboid_ext_mats=ivy.inv(ivy_mech.make_transformation_homogeneous(
-            shape_matrices))[..., 0:3, :], cuboid_dims=shape_dims)
+        primitive_scene = PrimitiveScene(cuboid_ext_mats=ivy.inv(shape_matrices)[..., 0:3, :], cuboid_dims=shape_dims)
         self.sdf = primitive_scene.sdf
 
     def update_path_visualization(self, multi_spline_points, multi_spline_sdf_vals, img_path):
