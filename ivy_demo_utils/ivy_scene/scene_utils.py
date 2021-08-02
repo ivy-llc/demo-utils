@@ -43,7 +43,7 @@ class SimObj:
         self._pr_obj.set_matrix(inv_ext_mat_homo)
 
     def get_inv_ext_mat(self):
-        return ivy.reshape(ivy.array(self._pr_obj.get_matrix().tolist(), 'float32'), (3, 4))
+        return ivy.array(self._pr_obj.get_matrix()[0:3].tolist(), 'float32')
 
     def get_ext_mat(self):
         return ivy.inv(ivy_mech.make_transformation_homogeneous(self.get_inv_ext_mat()))[0:3, :]
