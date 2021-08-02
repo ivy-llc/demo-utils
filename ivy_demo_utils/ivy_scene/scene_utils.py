@@ -37,9 +37,9 @@ class SimObj:
         return self._pr_obj.set_position(ivy.to_numpy(pos))
 
     def set_rot_mat(self, rot_mat):
-        inv_ext_mat = np.concatenate((ivy.to_numpy(rot_mat),
-                                      np.reshape(self._pr_obj.get_position(), (3, 1))), -1)
-        inv_ext_mat_homo = ivy_mech.make_transformation_homogeneous(inv_ext_mat)
+        inv_ext_mat = ivy.concatenate((
+            rot_mat, ivy.reshape(ivy.array(self._pr_obj.get_position().tolist()), (3, 1))), -1)
+        inv_ext_mat_homo = ivy.to_numpy(ivy_mech.make_transformation_homogeneous(inv_ext_mat))
         self._pr_obj.set_matrix(inv_ext_mat_homo)
 
     def get_inv_ext_mat(self):
