@@ -98,7 +98,7 @@ long_description = '\n'.join(lines)
 
 
 setup(name='ivy-demo-utils',
-      version='1.1.5',
+      version='1.1.8',
       description='Ivy Demo Utils provides a set of utilities for creating visual demos for Ivy libraries.',
       long_description=long_description,
       long_description_content_type = 'text/x-rst',
