@@ -29,14 +29,14 @@ def _replace_logos_html(txt):
     # backend logos
     backends_chunk = chunks[2]
     bc = backends_chunk.split('\n\n')
-    img_str = '.. image:: https://github.com/ivy-dl/ivy-dl.github.io/blob/master/img/externally_linked/logos/supported/frameworks.png?raw=true\n' \
+    img_str = '.. image:: https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/logos/supported/frameworks.png?raw=true\n' \
               '   :width: 100%'
     backends_chunk = '\n\n'.join(bc[0:1] + [img_str] + bc[2:])
 
     # library logos
     libraries_chunk = chunks[3]
     lc = libraries_chunk.split('\n\n')
-    img_str = '.. image:: https://github.com/ivy-dl/ivy-dl.github.io/blob/master/img/externally_linked/ivy_libraries.png?raw=true\n' \
+    img_str = '.. image:: https://github.com/unifyai/unifyai.github.io/blob/master/img/externally_linked/ivy_libraries.png?raw=true\n' \
               '   :width: 100%'
     libraries_chunk = '\n\n'.join(lc[0:1] + [img_str] + lc[2:])
 
