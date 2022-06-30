@@ -178,7 +178,7 @@ class BaseSimulator:
             sdf_borders = sdf_flags_1 != sdf_flags_0
             borders_indices = ivy.indices_where(sdf_borders)
             if borders_indices.shape[0] != 0:
-                to_concat = (ivy.array([0], dtype='int32'), ivy.cast(borders_indices, 'int32')[:, 0],
+                to_concat = (ivy.array([0], dtype='int32'), ivy.astype(borders_indices, 'int32')[:, 0],
                              ivy.array([-1], dtype='int32'))
             else:
                 to_concat = (ivy.array([0], dtype='int32'), ivy.array([-1], dtype='int32'))
