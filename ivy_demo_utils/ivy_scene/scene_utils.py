@@ -37,8 +37,8 @@ class SimObj:
         return self._pr_obj.set_position(ivy.to_numpy(pos))
 
     def set_rot_mat(self, rot_mat):
-        inv_ext_mat = ivy.concatenate((
-            rot_mat, ivy.reshape(ivy.array(self._pr_obj.get_position().tolist()), (3, 1))), -1)
+        inv_ext_mat = ivy.concat((
+            rot_mat, ivy.reshape(ivy.array(self._pr_obj.get_position().tolist()), (3, 1))), axis=-1)
         inv_ext_mat_homo = ivy.to_numpy(ivy_mech.make_transformation_homogeneous(inv_ext_mat))
         self._pr_obj.set_matrix(inv_ext_mat_homo)
 
@@ -182,7 +182,7 @@ class BaseSimulator:
                              ivy.array([-1], dtype='int32'))
             else:
                 to_concat = (ivy.array([0], dtype='int32'), ivy.array([-1], dtype='int32'))
-            border_indices = ivy.concatenate(to_concat, 0)
+            border_indices = ivy.concat(to_concat, axis=0)
             num_groups = border_indices.shape[0] - 1
             spline_path = list()
             for i in range(num_groups):
@@ -232,8 +232,8 @@ class BaseSimulator:
             )
 
         # matices
-        shape_matrices = ivy.concatenate(shape_matrices_list, 0)
-        shape_dims = ivy.concatenate(shape_dims_list, 0)
+        shape_matrices = ivy.concat(shape_matrices_list, axis=0)
+        shape_dims = ivy.concat(shape_dims_list, axis=0)
 
         # sdf
         primitive_scene = PrimitiveScene(cuboid_ext_mats=ivy.inv(ivy_mech.make_transformation_homogeneous(
@@ -243,17 +243,17 @@ class BaseSimulator:
     def setup_primitive_scene(self):
 
         # shape matrices
-        shape_matrices = ivy.concatenate([ivy.reshape(ivy.array(obj.get_matrix().tolist(), dtype='float32'), (1, 4, 4))
-                                          for obj in self._objects], 0)
+        shape_matrices = ivy.concat([ivy.reshape(ivy.array(obj.get_matrix().tolist(), dtype='float32'), (1, 4, 4))
+                                          for obj in self._objects], axis=0)
 
         # shape dims
-        x_dims = ivy.concatenate([ivy.reshape(ivy.array(
-            obj.get_bounding_box()[1] - obj.get_bounding_box()[0], dtype='float32'), (1, 1)) for obj in self._objects], 0)
-        y_dims = ivy.concatenate([ivy.reshape(ivy.array(
-            obj.get_bounding_box()[3] - obj.get_bounding_box()[2], dtype='float32'), (1, 1)) for obj in self._objects], 0)
-        z_dims = ivy.concatenate([ivy.reshape(ivy.array(
-            obj.get_bounding_box()[5] - obj.get_bounding_box()[4], dtype='float32'), (1, 1)) for obj in self._objects], 0)
-        shape_dims = ivy.concatenate((x_dims, y_dims, z_dims), -1)
+        x_dims = ivy.concat([ivy.reshape(ivy.array(
+            obj.get_bounding_box()[1] - obj.get_bounding_box()[0], dtype='float32'), (1, 1)) for obj in self._objects], axis=0)
+        y_dims = ivy.concat([ivy.reshape(ivy.array(
+            obj.get_bounding_box()[3] - obj.get_bounding_box()[2], dtype='float32'), (1, 1)) for obj in self._objects], axis=0)
+        z_dims = ivy.concat([ivy.reshape(ivy.array(
+            obj.get_bounding_box()[5] - obj.get_bounding_box()[4], dtype='float32'), (1, 1)) for obj in self._objects], axis=0)
+        shape_dims = ivy.concat((x_dims, y_dims, z_dims), axis=-1)
 
         # primitve scene visualization
         if self._with_primitive_scene_vis:
