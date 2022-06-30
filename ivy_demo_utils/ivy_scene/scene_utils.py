@@ -64,7 +64,7 @@ class SimCam(SimObj):
 
     def cap(self):
         self._pr_obj.handle_explicitly()
-        return ivy.expand_dims(ivy.array(self._pr_obj.capture_depth(True).tolist()), -1),\
+        return ivy.expand_dims(ivy.array(self._pr_obj.capture_depth(True).tolist()), axis=-1),\
                ivy.array(self._pr_obj.capture_rgb().tolist())
 
 
