@@ -1,5 +1,6 @@
 open3d
 numpy
+pyrep
 ivy-core # mod_name=ivy
 ivy-mech # mod_name=ivy_mech
 ivy-vision # mod_name=ivy_vision
