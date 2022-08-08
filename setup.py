@@ -97,7 +97,7 @@ lines = [line for line in lines if not (_is_html(line) or _is_raw_block(line))]
 long_description = '\n'.join(lines)
 
 
-setuptools.setup(name='ivy-demo-utils',
+setup(name='ivy-demo-utils',
       version='1.1.9',
       description='Ivy Demo Utils provides a set of utilities for creating visual demos for Ivy libraries.',
       long_description=long_description,
